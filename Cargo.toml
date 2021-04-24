@@ -1,0 +1,17 @@
+[package]
+tokio = { version = "1.0", features = ["full"] }
+name = "cepd"
+version = "0.1.0"
+authors = ["Murilo Santana <mvrilo@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+reqwest = { version = "0.11", features = ["json","blocking"] }
+sled = { version = "0.34" }
+serde = { version = "1.0", features = ["derive"] }
+serde_bytes = { version = "0.11" }
+tokio = { version = "1.0", features = ["full"] }
+async-trait = { version = "0.1" }
+warp = { version = "0.3" }
+bincode = "1.2.1"
+thiserror = "1.0"
