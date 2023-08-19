@@ -13,6 +13,12 @@ pub enum Error {
 
     #[error("internal error")]
     Internal,
+
+    #[error("io error")]
+    IO(#[from] std::io::Error),
+
+    #[error("hyper error")]
+    Hyper(#[from] hyper::Error),
 }
 
 impl From<reqwest::Error> for Error {
