@@ -15,7 +15,7 @@ impl Sled {
 }
 
 impl Storage for Sled {
-    fn get(&self, key: Vec<u8>) -> Result<Address, Error> {
+    fn get(&self, key: &Vec<u8>) -> Result<Address, Error> {
         match self.db.get(key)? {
             Some(val) => Ok(bincode::deserialize(val.as_ref().into())?),
             None => Err(Error::CacheMiss),

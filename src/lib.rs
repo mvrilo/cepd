@@ -8,19 +8,22 @@ use crate::client::Client;
 use crate::error::Error;
 use crate::storage::Storage;
 
-#[derive(Default, Debug)]
+#[derive(Debug)]
 pub struct Cepd<'a, C: Client + Copy, S: Storage> {
-    pub storage: Option<&'a S>,
-    pub client: Option<&'a C>,
+    pub storage: &'a S,
+    pub client: &'a C,
+}
+
+impl<'a, C: Client + Copy, S: Storage> Cepd<'a, C, S> {
+    pub fn new(client: &'a C, storage: &'a S) -> Self {
+        Self { storage, client }
+    }
 }
 
 impl<'a, C: Client + Copy, S: Storage> Cepd<'a, C, S> {
     pub fn search(&self, cep: &'a Vec<u8>) -> Result<Address, Error> {
-        let storage = self.storage.clone().unwrap();
-        let cli = self.client.clone().unwrap();
-
-        storage
-            .get(cep.clone())
-            .or_else(|_| cli.search(cep.clone()))
+        let storage = self.storage.clone();
+        let cli = self.client.clone();
+        storage.get(cep).or_else(|_| cli.search(cep.clone()))
     }
 }

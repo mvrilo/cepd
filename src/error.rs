@@ -1,4 +1,3 @@
-use serde::Serialize;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -27,13 +26,13 @@ impl From<reqwest::Error> for Error {
 }
 
 impl From<sled::Error> for Error {
-    fn from(err: sled::Error) -> Error {
+    fn from(_err: sled::Error) -> Error {
         Error::Internal
     }
 }
 
 impl From<bincode::Error> for Error {
-    fn from(err: bincode::Error) -> Error {
+    fn from(_err: bincode::Error) -> Error {
         Error::Decode
     }
 }
