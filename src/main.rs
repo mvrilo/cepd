@@ -9,17 +9,17 @@ use clap::{Parser, Subcommand};
 struct Cli {
     #[command(subcommand)]
     command: Commands,
+
+    #[arg(short, long)]
+    dbpath: Option<String>,
 }
 
 #[derive(Debug, Subcommand)]
 enum Commands {
-    /// Queries a zipcode
     #[command(arg_required_else_help = true)]
     Query {
-        /// The zipcode to query
         zipcode: String,
     },
-    /// HTTP Server
     Server,
 }
 
@@ -27,7 +27,8 @@ enum Commands {
 async fn main() {
     let cli = Cli::parse();
     let client = ViaCep::default();
-    let storage = Sled::new("./cepd.db".into());
+    let dbpath = cli.dbpath.unwrap_or_else(|| String::from("cepd_cache"));
+    let storage = Sled::new(&dbpath);
     let core = Cepd::new(client, storage);
     match cli.command {
         Commands::Query { zipcode } => {
@@ -38,7 +39,7 @@ async fn main() {
         Commands::Server => {
             tracing_subscriber::fmt()
                 .with_target(false)
-                .with_max_level(tracing::Level::DEBUG)
+                .with_max_level(tracing::Level::INFO)
                 .json()
                 .init();
 
