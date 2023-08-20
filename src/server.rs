@@ -20,7 +20,30 @@ const BANNER: &'static str = "<html>
     <style>*{font-family:courier}</style>
 </head>
 <body>
-    <p>this is a fast and small proxy-server with caching capabilities for fetch CEP (brazilian zipcode) information.</p>
+    <h1>cepd</h1>
+    <p>
+        cepd is a small and fast caching proxy-server<br>
+        for CEP records (brazilian zipcode).
+    </p>
+
+    <p>API: <pre>GET /q/:cep</pre></p>
+
+    <p>
+    Example:<br>
+
+    <pre>curl -sf http://localhost:3000/q/01311200 | jq
+{
+  \"zip\": \"01311-200\",
+  \"address\": \"Avenida Paulista\",
+  \"complement\": \"de 1047 a 1865 - lado ímpar\",
+  \"neighborhood\": \"Bela Vista\",
+  \"city\": \"São Paulo\",
+  \"state_initials\": \"SP\"
+}
+    </pre>
+    </p>
+
+    <p><a target='_blank' href='https://github.com/mvrilo/cepd'>source</a></p>
 </body>
 </html>";
 
@@ -68,12 +91,12 @@ pub async fn start(addr: SocketAddr, core: crate::Cepd) -> Result<()> {
         .with_state(state)
         .layer(
             TraceLayer::new_for_http()
-                .make_span_with(DefaultMakeSpan::new().include_headers(true))
+                .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
                 .on_response(
                     DefaultOnResponse::new()
                         .include_headers(true)
                         .level(Level::INFO)
-                        .latency_unit(LatencyUnit::Micros),
+                        .latency_unit(LatencyUnit::Millis),
                 ),
         );
     axum::Server::bind(&addr)

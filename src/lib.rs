@@ -38,15 +38,12 @@ where
 impl<C: Client, S: Storage> Cepd<C, S> {
     pub async fn search(&self, cep: &Vec<u8>) -> Result<Address> {
         let cli = self.client.clone();
-        match self.storage.get(cep) {
-            Ok(addr) => {
-                tracing::debug!("found: sled cach");
-                Ok(addr)
-            }
+        let storage = self.storage.clone();
+        match storage.get(cep) {
+            Ok(addr) => Ok(addr),
             Err(_) => {
                 let addr = cli.search(cep.clone()).await?;
-                self.storage.set(cep, &addr)?;
-                tracing::debug!("got: viacep client");
+                storage.set(cep, &addr)?;
                 Ok(addr)
             }
         }

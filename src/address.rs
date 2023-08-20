@@ -3,9 +3,10 @@ use std::fmt::{Display, Formatter, Result};
 
 #[derive(Serialize, Deserialize, Debug, Default, Clone)]
 pub struct Address {
-    pub ibge: String,
-    pub gia: String,
-
+    // #[serde(skip_serializing)]
+    // pub ibge: String,
+    // #[serde(skip_serializing)]
+    // pub gia: String,
     #[serde(rename(deserialize = "cep"))]
     pub zip: String,
 

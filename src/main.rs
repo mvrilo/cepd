@@ -38,7 +38,7 @@ async fn main() {
         Commands::Server => {
             tracing_subscriber::fmt()
                 .with_target(false)
-                .with_max_level(tracing::Level::INFO)
+                .with_max_level(tracing::Level::DEBUG)
                 .json()
                 .init();
 
