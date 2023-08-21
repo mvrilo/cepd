@@ -23,7 +23,7 @@ const BANNER: &'static str = "<html>
     <h1>cepd</h1>
     <p>
         cepd is a small and fast caching proxy-server<br>
-        for CEP records (brazilian zipcode).
+        for CEP records (brazilian postalcode).
     </p>
 
     <p>API: <pre>GET /q/:cep</pre></p>
@@ -33,7 +33,7 @@ const BANNER: &'static str = "<html>
 
     <pre>curl -sf http://localhost:3000/q/01311200 | jq
 {
-  \"zip\": \"01311-200\",
+  \"postalcode\": \"01311-200\",
   \"address\": \"Avenida Paulista\",
   \"complement\": \"de 1047 a 1865 - lado ímpar\",
   \"neighborhood\": \"Bela Vista\",
@@ -77,8 +77,8 @@ async fn handler() -> Html<&'static str> {
     Html(BANNER)
 }
 
-async fn query(Path(zipcode): Path<String>, State(state): State<Ctx>) -> Result<Json<Address>> {
-    let input = &zipcode.into_bytes().to_vec();
+async fn query(Path(postalcode): Path<String>, State(state): State<Ctx>) -> Result<Json<Address>> {
+    let input = &postalcode.into_bytes().to_vec();
     let addr = state.core.search(input).await?;
     Ok(Json(addr))
 }

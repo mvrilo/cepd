@@ -18,7 +18,7 @@ struct Cli {
 enum Commands {
     #[command(arg_required_else_help = true)]
     Query {
-        zipcode: String,
+        postalcode: String,
     },
     Server,
 }
@@ -31,8 +31,8 @@ async fn main() {
     let storage = Sled::new(&dbpath);
     let core = Cepd::new(client, storage);
     match cli.command {
-        Commands::Query { zipcode } => {
-            let input = zipcode.as_bytes().to_vec();
+        Commands::Query { postalcode } => {
+            let input = postalcode.as_bytes().to_vec();
             let res = core.search(&input).await.unwrap();
             println!("result: {}", res);
         }

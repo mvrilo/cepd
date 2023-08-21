@@ -5,10 +5,11 @@ use std::fmt::{Display, Formatter, Result};
 pub struct Address {
     // #[serde(skip_serializing)]
     // pub ibge: String,
+
     // #[serde(skip_serializing)]
     // pub gia: String,
     #[serde(rename(deserialize = "cep"))]
-    pub zip: String,
+    pub postalcode: String,
 
     #[serde(rename(deserialize = "logradouro"))]
     pub address: String,

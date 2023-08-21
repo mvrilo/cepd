@@ -1,8 +1,8 @@
 # cepd
 
-cepd is a small and fast caching proxy-server for CEP records (brazilian zipcode).
+cepd is a small and fast caching proxy-server for CEP records (brazilian postalcode).
 
-API: `GET /q/:zipcode`
+API: `GET /q/:postalcode`
 
 Example:
 
