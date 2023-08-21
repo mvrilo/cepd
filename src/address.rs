@@ -24,7 +24,7 @@ pub struct Address {
     pub city: String,
 
     #[serde(rename(deserialize = "uf"))]
-    pub state_initials: String,
+    pub state: String,
 }
 
 impl Display for Address {
@@ -32,7 +32,7 @@ impl Display for Address {
         write!(
             f,
             "{}, {} - {} - {} - {}",
-            self.address, self.complement, self.neighborhood, self.city, self.state_initials
+            self.address, self.complement, self.neighborhood, self.city, self.state
         )
     }
 }

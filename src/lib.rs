@@ -1,26 +1,20 @@
 pub mod address;
+pub mod client;
 pub mod error;
 pub mod server;
-pub mod sled;
-pub mod viacep;
+pub mod storage;
 
-use crate::{address::Address, error::Error};
-use async_trait::async_trait;
+use crate::{
+    address::Address,
+    client::{Client, ViaCep},
+    error::Error,
+    storage::{Sled, Storage},
+};
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-#[async_trait]
-pub trait Client: Copy + Clone + Sync + Send {
-    async fn search(self, key: Vec<u8>) -> Result<Address>;
-}
-
-pub trait Storage: Clone + Sync + Send {
-    fn get(&self, key: &Vec<u8>) -> Result<Address>;
-    fn set(&self, key: &Vec<u8>, value: &Address) -> Result<()>;
-}
-
 #[derive(Debug, Clone)]
-pub struct Cepd<C: Client = viacep::ViaCep, S: Storage = sled::Sled> {
+pub struct Cepd<C: Client = ViaCep, S: Storage = Sled> {
     pub storage: S,
     pub client: C,
 }

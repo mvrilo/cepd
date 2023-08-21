@@ -1,6 +1,4 @@
-use cepd::sled::Sled;
-use cepd::viacep::ViaCep;
-use cepd::Cepd;
+use cepd::{client::ViaCep, storage::Sled, Cepd};
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
