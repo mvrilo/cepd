@@ -1,4 +1,4 @@
-use cepd::{client::ViaCep, storage::Sled, Cepd};
+use cepd::{client::Viacep, storage::Sled, Cepd};
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -24,7 +24,7 @@ enum Commands {
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    let client = ViaCep::default();
+    let client = Viacep::default();
     let dbpath = cli.dbpath.unwrap_or_else(|| String::from("cepd_cache"));
     let storage = Sled::new(&dbpath);
     let core = Cepd::new(client, storage);

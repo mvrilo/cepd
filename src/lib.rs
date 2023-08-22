@@ -4,17 +4,12 @@ pub mod error;
 pub mod server;
 pub mod storage;
 
-use crate::{
-    address::Address,
-    client::{Client, ViaCep},
-    error::Error,
-    storage::{Sled, Storage},
-};
+use crate::{address::Address, client::Client, error::Error, storage::Storage};
 
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, Clone)]
-pub struct Cepd<C: Client = ViaCep, S: Storage = Sled> {
+pub struct Cepd<C: Client, S: Storage> {
     pub storage: S,
     pub client: C,
 }

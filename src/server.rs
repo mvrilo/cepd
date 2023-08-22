@@ -1,4 +1,4 @@
-use crate::{error::Error, Address, Result};
+use crate::{client::Viacep, error::Error, storage::Sled, Address, Result};
 use axum::{
     extract::{Path, State},
     response::{Html, Response},
@@ -64,11 +64,11 @@ impl axum::response::IntoResponse for Error {
 
 #[derive(Debug, Clone)]
 struct Ctx {
-    pub core: crate::Cepd,
+    pub core: crate::Cepd<Viacep, Sled>,
 }
 
 impl Ctx {
-    pub fn new(core: crate::Cepd) -> Self {
+    pub fn new(core: crate::Cepd<Viacep, Sled>) -> Self {
         Self { core }
     }
 }
@@ -83,7 +83,7 @@ async fn query(Path(postalcode): Path<String>, State(state): State<Ctx>) -> Resu
     Ok(Json(addr))
 }
 
-pub async fn start(addr: SocketAddr, core: crate::Cepd) -> Result<()> {
+pub async fn start(addr: SocketAddr, core: crate::Cepd<Viacep, Sled>) -> Result<()> {
     let state = Ctx::new(core);
     let app = Router::new()
         .route("/", get(handler))

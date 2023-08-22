@@ -9,10 +9,10 @@ pub trait Client: Copy + Clone + Sync + Send {
 }
 
 #[derive(Debug, Clone, Copy, Default)]
-pub struct ViaCep;
+pub struct Viacep;
 
 #[async_trait]
-impl Client for ViaCep {
+impl Client for Viacep {
     async fn search(self, postalcode: Vec<u8>) -> Result<Address> {
         let url = format!(
             "{}/{}/json/",
