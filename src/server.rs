@@ -78,8 +78,7 @@ async fn handler() -> Html<&'static str> {
 }
 
 async fn query(Path(postalcode): Path<String>, State(state): State<Ctx>) -> Result<Json<Address>> {
-    let input = &postalcode.into_bytes().to_vec();
-    let addr = state.core.search(input).await?;
+    let addr = state.core.search(&postalcode).await?;
     Ok(Json(addr))
 }
 

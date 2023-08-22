@@ -30,8 +30,7 @@ async fn main() {
     let core = Cepd::new(client, storage);
     match cli.command {
         Commands::Query { postalcode } => {
-            let input = postalcode.as_bytes().to_vec();
-            let res = core.search(&input).await.unwrap();
+            let res = core.search(&postalcode).await.unwrap();
             println!("result: {}", res);
         }
         Commands::Server => {

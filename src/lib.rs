@@ -25,7 +25,7 @@ where
 }
 
 impl<C: Client, S: Storage> Cepd<C, S> {
-    pub async fn search(&self, cep: &Vec<u8>) -> Result<Address> {
+    pub async fn search(&self, cep: &str) -> Result<Address> {
         let cli = self.client.clone();
         let storage = self.storage.clone();
         match storage.get(cep) {
