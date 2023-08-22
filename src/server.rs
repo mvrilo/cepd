@@ -14,7 +14,7 @@ use tower_http::{
 };
 use tracing::Level;
 
-const BANNER: &'static str = "<html>
+const BANNER: &str = "<html>
 <head>
     <title>cepd - https://github.com/mvrilo/cepd</title>
     <style>*{font-family:courier}</style>
