@@ -73,20 +73,19 @@ impl Ctx {
     }
 }
 
-async fn handler() -> Html<&'static str> {
+async fn home() -> Html<&'static str> {
     Html(BANNER)
 }
 
 async fn query(Path(postalcode): Path<String>, State(state): State<Ctx>) -> Result<Json<Address>> {
-    let addr = state.core.search(&postalcode).await?;
-    Ok(Json(addr))
+    Ok(Json(state.core.search(&postalcode).await?))
 }
 
 pub async fn start(addr: SocketAddr, core: crate::Cepd<Viacep, Sled>) -> Result<()> {
     let state = Ctx::new(core);
     let app = Router::new()
-        .route("/", get(handler))
-        .route("/q/:c", get(query))
+        .route("/", get(home))
+        .route("/q/:postalcode", get(query))
         .with_state(state)
         .layer(
             TraceLayer::new_for_http()

@@ -1,4 +1,5 @@
-use cepd::{client::Viacep, storage::Sled, Cepd};
+use anyhow::Context;
+use cepd::{client::Viacep, storage::Sled, Cepd, Result};
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -22,7 +23,7 @@ enum Commands {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
     let cli = Cli::parse();
     let client = Viacep::default();
     let dbpath = cli.dbpath.unwrap_or_else(|| String::from("cepd_cache"));
@@ -30,8 +31,11 @@ async fn main() {
     let core = Cepd::new(client, storage);
     match cli.command {
         Commands::Query { postalcode } => {
-            let res = core.search(&postalcode).await.unwrap();
-            println!("result: {}", res);
+            let res = core
+                .search(&postalcode)
+                .await
+                .context("Fail to query postalcode")?;
+            println!("{}", res);
         }
         Commands::Server => {
             tracing_subscriber::fmt()
@@ -39,11 +43,13 @@ async fn main() {
                 .with_max_level(tracing::Level::INFO)
                 .json()
                 .init();
-
-            tracing::info!("server started at http://127.0.0.1:3000");
-            cepd::server::start("127.0.0.1:3000".parse().unwrap(), core)
+            let addr =
+                std::env::var("CEPD_ADDRESS").unwrap_or_else(|_| String::from("127.0.0.1:3000"));
+            tracing::info!("Server started at http://{}", addr);
+            cepd::server::start(addr.parse().context("Fail to parse server address")?, core)
                 .await
-                .unwrap();
+                .context("Fail to start HTTP server")?;
         }
     }
+    Ok(())
 }

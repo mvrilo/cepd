@@ -1,4 +1,5 @@
 use crate::{Address, Error, Result};
+use anyhow::Context;
 use std::sync::Arc;
 
 pub trait Storage: Clone + Sync + Send {
@@ -14,7 +15,11 @@ pub struct Sled {
 impl Sled {
     pub fn new(path: &str) -> Self {
         Sled {
-            db: Arc::new(sled::open(path).unwrap()),
+            db: Arc::new(
+                sled::open(path)
+                    .context("Failed to open sled database")
+                    .unwrap(),
+            ),
         }
     }
 }

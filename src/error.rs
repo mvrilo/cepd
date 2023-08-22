@@ -19,6 +19,9 @@ pub enum Error {
 
     #[error("hyper error")]
     Hyper(#[from] hyper::Error),
+
+    #[error("anyhow error")]
+    Anyhow(#[from] anyhow::Error),
 }
 
 impl From<reqwest::Error> for Error {

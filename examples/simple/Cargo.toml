@@ -1,0 +1,8 @@
+[package]
+name = "simple"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cepd = { path = "../.." }
+tokio = "1.32.0"

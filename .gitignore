@@ -1,3 +1,3 @@
 cepd_cache/
-/target
+target
 Cargo.lock
